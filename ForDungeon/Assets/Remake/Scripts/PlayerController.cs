@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace NewMovement
+namespace Remake
 {
     public class PlayerController : MonoBehaviour
     {
@@ -54,8 +54,13 @@ namespace NewMovement
                 transform.Rotate(new Vector3(0, Input.GetAxis("Mouse X") * sensitivity, 0));
                 _camera.transform.localRotation = new Quaternion(0, 0, 0, 1);
                 _camera.transform.localPosition = _defaultCameraPos;
-
                 _lookDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+
+                Quaternion lookRotation = Quaternion.LookRotation(_lookDirection);
+                _model.localRotation = Quaternion.Slerp(
+                    _model.localRotation,
+                    lookRotation,
+                    Time.deltaTime * rotationSpeed);
             }
             else {
                 _camera.transform.RotateAround(
@@ -64,11 +69,6 @@ namespace NewMovement
                     Input.GetAxis("Mouse X") * sensitivity);
             }
 
-            Quaternion lookRotation = Quaternion.LookRotation(_lookDirection);
-            _model.localRotation = Quaternion.Slerp(
-                _model.localRotation,
-                lookRotation,
-                Time.deltaTime * rotationSpeed);
         }
     }
 }
