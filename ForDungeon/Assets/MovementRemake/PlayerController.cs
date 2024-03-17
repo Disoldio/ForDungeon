@@ -12,6 +12,9 @@ namespace NewMovement
         [SerializeField]
         private float movementSpeed = 1;
 
+        [SerializeField]
+        private float rotationSpeed = 1;
+
         private Camera _camera;
         private Transform _model;
         private Rigidbody _rigidbody;
@@ -49,17 +52,7 @@ namespace NewMovement
                     transform.right * Input.GetAxisRaw("Horizontal") +
                     transform.position;
 
-                // lookDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-
-                // Quaternion lookRotation = Quaternion.LookRotation(lookDirection, transform.up);
-                // _model.localRotation = Quaternion.LerpUnclamped(
-                //     transform.rotation,
-                //     lookRotation,
-                //     1);
-
-                _model.LookAt(nextPos, Vector3.up);
-
-                print(nextPos);
+                lookDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
             }
             else {
                 _camera.transform.RotateAround(
@@ -68,7 +61,11 @@ namespace NewMovement
                     Input.GetAxis("Mouse X") * sensitivity);
             }
 
-
+            Quaternion lookRotation = Quaternion.LookRotation(lookDirection);
+            _model.localRotation = Quaternion.Slerp(
+                _model.localRotation,
+                lookRotation,
+                Time.deltaTime * rotationSpeed);
         }
     }
 }
