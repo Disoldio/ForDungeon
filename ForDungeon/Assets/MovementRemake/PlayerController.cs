@@ -13,16 +13,22 @@ namespace NewMovement
         private float movementSpeed = 1;
 
         [SerializeField]
+        private float runningSpeed = 2;
+
+        [SerializeField]
         private float rotationSpeed = 1;
+
 
         private Camera _camera;
         private Transform _model;
         private Rigidbody _rigidbody;
         private Vector3 _defaultCameraPos;
-        private Vector3 lookDirection = Vector3.zero;
+        private Vector3 _lookDirection = Vector3.zero;
+
         void Start()
         {
             Cursor.lockState = CursorLockMode.Locked;
+
             _rigidbody = GetComponent<Rigidbody>();
             _camera = GetComponentInChildren<Camera>();
             _defaultCameraPos = _camera.transform.localPosition;
@@ -33,7 +39,9 @@ namespace NewMovement
         {
             bool isMoving = Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0;
             bool movesDiagonal = Input.GetAxisRaw("Horizontal") != 0 && Input.GetAxisRaw("Vertical") != 0;
-            float currentMovementSpeed = movesDiagonal ? movementSpeed / 1.5f : movementSpeed;
+
+            float currentMovementSpeed = Input.GetAxisRaw("Fire3") > 0 ? runningSpeed : movementSpeed;
+            currentMovementSpeed = movesDiagonal ? currentMovementSpeed / 1.5f : currentMovementSpeed;
 
             _rigidbody.velocity = 
                 (transform.forward * Input.GetAxisRaw("Vertical") + transform.right * Input.GetAxisRaw("Horizontal")) * currentMovementSpeed;
@@ -47,12 +55,7 @@ namespace NewMovement
                 _camera.transform.localRotation = new Quaternion(0, 0, 0, 1);
                 _camera.transform.localPosition = _defaultCameraPos;
 
-                Vector3 nextPos = 
-                    transform.forward * Input.GetAxisRaw("Vertical") +
-                    transform.right * Input.GetAxisRaw("Horizontal") +
-                    transform.position;
-
-                lookDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+                _lookDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
             }
             else {
                 _camera.transform.RotateAround(
@@ -61,7 +64,7 @@ namespace NewMovement
                     Input.GetAxis("Mouse X") * sensitivity);
             }
 
-            Quaternion lookRotation = Quaternion.LookRotation(lookDirection);
+            Quaternion lookRotation = Quaternion.LookRotation(_lookDirection);
             _model.localRotation = Quaternion.Slerp(
                 _model.localRotation,
                 lookRotation,
