@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerAttack : MonoBehaviour
 {
@@ -8,16 +9,35 @@ public class PlayerAttack : MonoBehaviour
     private Sword currentSword;
 
     [SerializeField]
+    private float health;
+
+    [SerializeField]
     private Vector3 rayOffset = Vector3.zero;
+
+    [SerializeField]
+    private Transform swordHand;
+
+    [SerializeField]
+    private Slider healthBar;
 
     private float _cooldownTime;
     private bool _canAttack = true;
     private Ray _ray;
+    private SwordManager _swordManager;
+    private int _currentSwordId = 0;
+    private float _currentHealth;
 
     private void Start()
     {
-        currentSword.gameObject.SetActive(true);
+        _swordManager = FindObjectOfType<SwordManager>();
+
+        currentSword = Instantiate(_swordManager.GetSwordById(_currentSwordId), swordHand).GetComponent<Sword>();
+
         _cooldownTime = 1 / currentSword.GetAttackSpeed();
+
+        _currentHealth = health;
+        healthBar.maxValue = health;
+        healthBar.value = health;
     }
 
     private void FixedUpdate()
@@ -55,6 +75,13 @@ public class PlayerAttack : MonoBehaviour
         _canAttack = false;
         yield return new WaitForSeconds( _cooldownTime );
         _canAttack = true;
+    }
+
+    public void TakeDamage(float damage)
+    {
+        _currentHealth -= damage;
+        healthBar.value = _currentHealth;
+        print($"Player's health: {_currentHealth}");
     }
 
     private void DebugAttackRay()

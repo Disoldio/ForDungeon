@@ -10,7 +10,7 @@ namespace Remake
         private RectTransform _sliderRectTransform;
         private Transform _cameraTransform;
         private Slider _slider;
-        private void Start()
+        private void Awake()
         {
             _sliderRectTransform = GetComponent<RectTransform>();
             _cameraTransform = Camera.main.transform;
