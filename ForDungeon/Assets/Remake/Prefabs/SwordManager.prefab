@@ -47,3 +47,4 @@ MonoBehaviour:
   swords:
   - {fileID: 1493978196124925967, guid: 0d479522e12b3c34b9cb03914cfa8be8, type: 3}
   - {fileID: 3594613769945328135, guid: 5c2e6cff05d97d243ae11330d3725536, type: 3}
+  defaultSword: {fileID: 1493978196124925967, guid: 0d479522e12b3c34b9cb03914cfa8be8, type: 3}

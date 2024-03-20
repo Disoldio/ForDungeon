@@ -24,14 +24,23 @@ public class PlayerAttack : MonoBehaviour
     private bool _canAttack = true;
     private Ray _ray;
     private SwordManager _swordManager;
-    private int _currentSwordId = 0;
+    private int _currentSwordHashCode = -1;
     private float _currentHealth;
 
     private void Start()
     {
         _swordManager = FindObjectOfType<SwordManager>();
 
-        currentSword = Instantiate(_swordManager.GetSwordById(_currentSwordId), swordHand).GetComponent<Sword>();
+        _currentSwordHashCode = PlayerPrefs.GetInt("swordHashCode", -1);
+        if (_currentSwordHashCode != -1)
+        {
+            currentSword = Instantiate(_swordManager.GetSwordByHashCode(_currentSwordHashCode), swordHand).GetComponent<Sword>();
+        }
+        else
+        {
+            currentSword = Instantiate(_swordManager.GetDefaultSword(), swordHand).GetComponent<Sword>();
+        }
+
 
         _cooldownTime = 1 / currentSword.GetAttackSpeed();
 

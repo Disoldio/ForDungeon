@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Remake/Test.unity
+    guid: 6d8b53adc0b8b5a46ae53cf0debe9151
   m_configObjects: {}
