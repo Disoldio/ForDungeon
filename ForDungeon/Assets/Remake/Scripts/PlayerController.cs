@@ -18,6 +18,14 @@ namespace Remake
         [SerializeField]
         private float rotationSpeed = 1;
 
+        [SerializeField]
+        private Vector3 cameraOffset = Vector3.zero;
+
+        [SerializeField]
+        private float cameraToObstacleDistance = 5;
+
+        [SerializeField]
+        private float cameraFromObstacleDistance = 2;
 
         private Camera _camera;
         private Transform _model;
@@ -35,7 +43,7 @@ namespace Remake
             _model = transform.Find("Model");
         }
 
-        void Update()
+        private void Update()
         {
             bool isMoving = Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0;
             bool movesDiagonal = Input.GetAxisRaw("Horizontal") != 0 && Input.GetAxisRaw("Vertical") != 0;
@@ -69,6 +77,22 @@ namespace Remake
                     Input.GetAxis("Mouse X") * sensitivity);
             }
 
+            PlaceCameraAtRay();
+            DebugCameraRay();
+
+        }
+        private void PlaceCameraAtRay()
+        {
+            Ray ray = new Ray(transform.position + cameraOffset, -_camera.transform.forward);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit, cameraToObstacleDistance))
+            {
+                _camera.transform.position = hit.point + _camera.transform.forward * cameraFromObstacleDistance;
+            }
+        }
+        private void DebugCameraRay()
+        {
+            Debug.DrawRay(transform.position + cameraOffset, -_camera.transform.forward * cameraToObstacleDistance, Color.green);
         }
     }
 }
