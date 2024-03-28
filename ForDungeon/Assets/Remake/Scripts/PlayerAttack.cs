@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class PlayerAttack : MonoBehaviour
 {
-    [SerializeField]
     private Sword currentSword;
 
     [SerializeField]
@@ -24,27 +23,28 @@ public class PlayerAttack : MonoBehaviour
     private bool _canAttack = true;
     private Ray _ray;
     private SwordManager _swordManager;
-    private int _currentSwordHashCode = -1;
+    private int _currentSwordId = -1;
     private float _currentHealth;
 
     private void Start()
     {
         _swordManager = FindObjectOfType<SwordManager>();
 
-        _currentSwordHashCode = PlayerPrefs.GetInt("swordHashCode", -1);
-        if (_currentSwordHashCode != -1)
+        _currentSwordId = PlayerPrefs.GetInt("swordId", -1);
+        print(_currentSwordId);
+        if (_currentSwordId != -1)
         {
-            currentSword = Instantiate(_swordManager.GetSwordByHashCode(_currentSwordHashCode), swordHand).GetComponent<Sword>();
+            /*currentSword = Instantiate(_swordManager.GetSwordByHashCode(_currentSwordHashCode), swordHand).GetComponent<Sword>();*/
+            currentSword = _swordManager.GetSwordById(_currentSwordId);
         }
         else
         {
-            currentSword = Instantiate(_swordManager.GetDefaultSword(), swordHand).GetComponent<Sword>();
+            currentSword = _swordManager.GetDefaultSword();
         }
 
-
         _cooldownTime = 1 / currentSword.GetAttackSpeed();
-
         _currentHealth = health;
+
         healthBar.maxValue = health;
         healthBar.value = health;
     }
@@ -68,12 +68,12 @@ public class PlayerAttack : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(_ray, out hit, currentSword.GetMaxDistance()))
         {
-            print($"{currentSword.name} hit {hit.transform.name}");
+            print($"{currentSword.GetName()} hit {hit.transform.name}");
 
             if (hit.transform.GetComponent<Enemy>())
             {
                 Enemy enemy = hit.transform.GetComponent<Enemy>();
-                enemy.TakeDamage(currentSword.GetStrenght());
+                enemy.TakeDamage(currentSword.GetStrength());
             }
         }
         StartCoroutine("StartCooldown");

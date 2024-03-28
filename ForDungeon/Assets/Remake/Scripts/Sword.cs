@@ -2,20 +2,34 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Sword : MonoBehaviour
+public class Sword
 {
-    [SerializeField]
-    private float _strenght;
-
-    [SerializeField]
+    private int _id;
+    private string _name;
+    private float _strength;
     private float _attackSpeed;
-
-    [SerializeField]
     private float _maxDistance;
 
-    public float GetStrenght()
+    public Sword (int id, string name, float strenght, float attackSpeed, float maxDistance)
     {
-        return _strenght;
+        _id = id;
+        _name = name;
+        _strength = strenght;
+        _attackSpeed = attackSpeed;
+        _maxDistance = maxDistance;
+    }
+
+    public int GetId()
+    {
+        return _id;
+    }
+    public string GetName()
+    {
+        return _name;
+    }
+    public float GetStrength()
+    {
+        return _strength;
     }
     public float GetAttackSpeed()
     {

@@ -18,7 +18,6 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     protected Vector3 rayOffset = Vector3.zero;
 
-    [SerializeField]
     protected Sword currentSword;
 
     protected float _currentHealth;
@@ -56,7 +55,7 @@ public class Enemy : MonoBehaviour
             if (hit.transform.GetComponent<PlayerAttack>())
             {
                 PlayerAttack playerAttack = hit.transform.GetComponent<PlayerAttack>();
-                playerAttack.TakeDamage(currentSword.GetStrenght());
+                playerAttack.TakeDamage(currentSword.GetStrength());
             }
         }
     }
